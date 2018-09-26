@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Router;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransformer;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer;
@@ -61,9 +61,13 @@ class Select2EntityType extends AbstractType
         }
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults(
+            array(
                 'class' => null,
                 'remote_path' => null,
                 'remote_route' => null,
@@ -75,7 +79,8 @@ class Select2EntityType extends AbstractType
                 'data_type' => $this->dataType,
                 'text_property' => null,
                 'placeholder' => ''
-            ));
+            )
+        );
     }
 
     /**
