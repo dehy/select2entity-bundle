@@ -1,6 +1,6 @@
 <?php
 
-namespace Tetranz\Select2EntityBundle\Form\DataTransformer;
+namespace Dehy\ChoicesJsEntityBundle\Form\DataTransformer;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * Data transformer for multiple mode (i.e., multiple = true)
  *
  * Class EntitiesToPropertyTransformer
- * @package Tetranz\Select2EntityBundle\Form\DataTransformer
+ * @package Dehy\ChoicesJsEntityBundle\Form\DataTransformer
  */
 class EntitiesToPropertyTransformer implements DataTransformerInterface
 {
@@ -38,8 +38,14 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
      * @param string $primaryKey
      * @param string $newTagPrefix
      */
-    public function __construct(ObjectManager $em, $class, $textProperty = null, $primaryKey = 'id', $newTagPrefix = '__', $newTagText = ' (NEW)')
-    {
+    public function __construct(
+        ObjectManager $em,
+        $class,
+        $textProperty = null,
+        $primaryKey = 'id',
+        $newTagPrefix = '__',
+        $newTagText = ' (NEW)'
+    ) {
         $this->em = $em;
         $this->className = $class;
         $this->textProperty = $textProperty;
@@ -69,10 +75,13 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
                 : $this->accessor->getValue($entity, $this->textProperty);
 
             if ($this->em->contains($entity)) {
-                $value = (string) $this->accessor->getValue($entity, $this->primaryKey);
+                $value = (string) $this->accessor->getValue(
+                    $entity,
+                    $this->primaryKey
+                );
             } else {
                 $value = $this->newTagPrefix . $text;
-                $text = $text.$this->newTagText;
+                $text = $text . $this->newTagText;
             }
 
             $data[$value] = $text;
@@ -100,25 +109,32 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
             $cleanValue = substr($value, $tagPrefixLength);
             $valuePrefix = substr($value, 0, $tagPrefixLength);
             if ($valuePrefix == $this->newTagPrefix) {
-                $object = new $this->className;
-                $this->accessor->setValue($object, $this->textProperty, $cleanValue);
+                $object = new $this->className();
+                $this->accessor->setValue(
+                    $object,
+                    $this->textProperty,
+                    $cleanValue
+                );
                 $newObjects[] = $object;
                 unset($values[$key]);
             }
         }
 
         // get multiple entities with one query
-        $entities = $this->em->createQueryBuilder()
+        $entities = $this->em
+            ->createQueryBuilder()
             ->select('entity')
             ->from($this->className, 'entity')
-            ->where('entity.'.$this->primaryKey.' IN (:ids)')
+            ->where('entity.' . $this->primaryKey . ' IN (:ids)')
             ->setParameter('ids', $values)
             ->getQuery()
             ->getResult();
 
-          // this will happen if the form submits invalid data
+        // this will happen if the form submits invalid data
         if (count($entities) != count($values)) {
-            throw new TransformationFailedException('One or more id values are invalid');
+            throw new TransformationFailedException(
+                'One or more id values are invalid'
+            );
         }
 
         return array_merge($entities, $newObjects);

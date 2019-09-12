@@ -1,4 +1,4 @@
-{% block tetranz_select2entity_widget %}
+{% block dehy_choicesjsentity_widget %}
     {% set attr = attr|merge({
     'data-ajax--url':remote_path,
     'data-ajax--cache': cache ? 'true' : 'false',
@@ -11,7 +11,7 @@
     'data-page-limit':page_limit,
     'data-scroll':scroll ? 'true' : 'false',
     'data-autostart':autostart ? 'true' : 'false',
-    'class' : (attr.class|default('') ~ ' select2entity form-control')|trim,
+    'class' : (attr.class|default('') ~ ' choicesjsentity form-control')|trim,
     'data-name' : name|e('html_attr')
     }) %}
 
@@ -47,7 +47,7 @@
                         <option value=""></option>
                 {% endif %}
                 {% for id, label in value %}
-                    {% block tetranz_select2entity_widget_select_option %}
+                    {% block dehy_choicesjsentity_widget_select_option %}
                         <option value="{{ id }}" selected="selected">{{ label }}</option>
                     {% endblock %}
                 {% endfor %}

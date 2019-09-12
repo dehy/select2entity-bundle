@@ -1,22 +1,27 @@
 {
-    "name": "tetranz/select2entity-bundle",
+    "name": "dehy/choicesjsentity-bundle",
     "type": "symfony-bundle",
-    "description": "A Symfony bundle that integrates Select2 as a drop-in replacement for a standard entity field on a Symfony form.",
-    "keywords": ["symfony","select2", "typeahead","autocomplete"],
+    "description": "A Symfony bundle that integrates Choices.js as a drop-in replacement for a standard entity field on a Symfony form.",
+    "keywords": ["symfony","choices.js", "typeahead","autocomplete"],
     "license": "MIT",
     "authors": [
         {
             "name": "Ross Keatinge",
-            "email": "tetranz@gmail.com"
+            "email": "dehy@gmail.com"
+        },
+        {
+            "name": "Arnaud de Mouhy",
+            "email": "arnaud@admds.net"
         }
     ],
     "require": {
         "php": ">=5.4.0",
+        "ext-json": "*",
         "doctrine/orm": ">=2.4",
         "twig/twig": ">=2.9"
     },
     "autoload": {
-        "psr-4": { "Tetranz\\Select2EntityBundle\\": "" }
+        "psr-4": { "Dehy\\ChoicesJsEntityBundle\\": "" }
     },
     "extra": {
         "branch-alias": {

@@ -1,21 +1,21 @@
-[Note from project maintainer: June 17th 2019](https://github.com/tetranz/select2entity-bundle/issues/144)
+[Note from project maintainer: June 17th 2019](https://github.com/dehy/choicesjsentity-bundle/issues/144)
 
-select2entity-bundle
+choicesjsentity-bundle
 ====================
 
 ## Introduction
 
-This is a Symfony bundle which enables the popular [Select2](https://select2.github.io) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
+This is a Symfony bundle which enables the popular [Choices.js](https://choices.js.github.io) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
 
 It works with Symfony 2, 3 and 4.
 
 The main feature that this bundle provides compared with the standard Symfony entity field (rendered with a html select) is that the list is retrieved via a remote ajax call. This means that the list can be of almost unlimited size. The only limitation is the performance of the database query or whatever that retrieves the data in the remote web service.
 
-It works with both single and multiple selections. If the form is editing a Symfony entity then these modes correspond with many to one and many to many relationships. In multiple mode, most people find the Select2 user interface easier to use than a standard select tag with multiple=true with involves awkward use of the ctrl key etc.
+It works with both single and multiple selections. If the form is editing a Symfony entity then these modes correspond with many to one and many to many relationships. In multiple mode, most people find the Choices.js user interface easier to use than a standard select tag with multiple=true with involves awkward use of the ctrl key etc.
 
-The project was inspired by [lifo/typeahead-bundle](https://github.com/lifo101/typeahead-bundle) which uses the Typeahead component in Bootstrap 2 to provide similar functionality. Select2Entity can be used anywhere Select2 can be installed, including Bootstrap 3.
+The project was inspired by [lifo/typeahead-bundle](https://github.com/lifo101/typeahead-bundle) which uses the Typeahead component in Bootstrap 2 to provide similar functionality. ChoicesJsEntity can be used anywhere Choices.js can be installed, including Bootstrap 3.
 
-Thanks to @ismailbaskin we now have Select2 version 4 compatibility.
+Thanks to @ismailbaskin we now have Choices.js version 4 compatibility.
 
 ## Screenshots
 
@@ -29,36 +29,36 @@ This is a form with a multiple selection field list expanded.
 
 ## Installation
 
-Select2 must be installed and working first. I hope to setup a demo site but my setup is basically [BraincraftedBootstrapBundle](http://bootstrap.braincrafted.com) with Select2 installed for Bootstrap 3. Once the Braincrafted bundle is working, the only files I've needed to install are:
+Choices.js must be installed and working first. I hope to setup a demo site but my setup is basically [BraincraftedBootstrapBundle](http://bootstrap.braincrafted.com) with Choices.js installed for Bootstrap 3. Once the Braincrafted bundle is working, the only files I've needed to install are:
 
-select2.js, select2.css from https://github.com/select2/select2/tree/4.0.0
+choices.js.js, choices.js.css from https://github.com/choices.js/choices.js/tree/4.0.0
 
-select2-bootstrap.css from https://github.com/t0m/select2-bootstrap-css/tree/bootstrap3. That gets it working for Bootstrap 3.
+choices.js-bootstrap.css from https://github.com/t0m/choices.js-bootstrap-css/tree/bootstrap3. That gets it working for Bootstrap 3.
 
 These files live in the Resources/public/js and Resources/public/css folders of one of my bundles and then included in my main layout.html.twig file.
 
-Alternatively, minified versions of select2.js and select2.css can be loaded from the CloudFlare CDN using the two lines of code given here: [https://select2.github.io](https://select2.github.io). Make sure the script tag comes after where jQuery is loaded. That might be in the page footer.
+Alternatively, minified versions of choices.js.js and choices.js.css can be loaded from the CloudFlare CDN using the two lines of code given here: [https://choices.js.github.io](https://choices.js.github.io). Make sure the script tag comes after where jQuery is loaded. That might be in the page footer.
 
-* Add `tetranz/select2entity-bundle` to your projects `composer.json` "requires" section:
+* Add `dehy/choicesjsentity-bundle` to your projects `composer.json` "requires" section:
 
 ```javascript
 {
     // ...
     "require": {
         // ...
-        "tetranz/select2entity-bundle": "2.*"
+        "dehy/choicesjsentity-bundle": "2.*"
     }
 }
 ```
-Note that this only works with Select2 version 4. If you are using Select2 version 3.X please use `"tetranz/select2entity-bundle": "1.*"` in `composer.json`
+Note that this only works with Choices.js version 4. If you are using Choices.js version 3.X please use `"dehy/choicesjsentity-bundle": "1.*"` in `composer.json`
 
-* Run `php composer.phar update tetranz/select2entity-bundle` in your project root.
+* Run `php composer.phar update dehy/choicesjsentity-bundle` in your project root.
 * Update your project `app/AppKernel.php` file and add this bundle to the $bundles array:
 
 ```php
 $bundles = array(
     // ...
-    new Tetranz\Select2EntityBundle\TetranzSelect2EntityBundle(),
+    new Dehy\ChoicesJsEntityBundle\DehyChoicesJsEntityBundle(),
 );
 ```
 
@@ -67,29 +67,29 @@ $bundles = array(
 ```yaml
 twig:
     form_themes:
-        - 'TetranzSelect2EntityBundle:Form:fields.html.twig'
+        - 'DehyChoicesJsEntityBundle:Form:fields.html.twig'
         
 ```
-On Symfony 4, use `@TetranzSelect2Entity/Form/fields.html.twig` instead of `TetranzSelect2EntityBundle:Form:fields.html.twig`
+On Symfony 4, use `@DehyChoicesJsEntity/Form/fields.html.twig` instead of `DehyChoicesJsEntityBundle:Form:fields.html.twig`
 * Load the Javascript on the page. The simplest way is to add the following to your layout file. Don't forget to run console assets:install. Alternatively, do something more sophisticated with Assetic.
 ```
-<script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
+<script src="{{ asset('bundles/dehychoicesjsentity/js/choicesjsentity.js') }}"></script>
 ```
 
 ## How to use
 
-The following is for Symfony 3. The latest version works on both Symfony 2 and Symfony 3 but see https://github.com/tetranz/select2entity-bundle/tree/v2.1 for Symfony 2 configuration and use.
+The following is for Symfony 3. The latest version works on both Symfony 2 and Symfony 3 but see https://github.com/dehy/choicesjsentity-bundle/tree/v2.1 for Symfony 2 configuration and use.
 
-Select2Entity is simple to use. In the buildForm method of a form type class, specify `Select2EntityType::class` as the type where you would otherwise use `entity:class`.
+ChoicesJsEntity is simple to use. In the buildForm method of a form type class, specify `ChoicesJsEntityType::class` as the type where you would otherwise use `entity:class`.
 
 Here's an example:
 
 ```php
 $builder
-   ->add('country', Select2EntityType::class, [
+   ->add('country', ChoicesJsEntityType::class, [
             'multiple' => true,
-            'remote_route' => 'tetranz_test_default_countryquery',
-            'class' => '\Tetranz\TestBundle\Entity\Country',
+            'remote_route' => 'dehy_test_default_countryquery',
+            'class' => '\Dehy\TestBundle\Entity\Country',
             'primary_key' => 'id',
             'text_property' => 'name',
             'minimum_input_length' => 2,
@@ -105,7 +105,7 @@ $builder
 ```
 Put this at the top of the file with the form type class:
 ```php
-use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
+use Dehy\ChoicesJsEntityBundle\Form\Type\ChoicesJsEntityType;
 ```
 
 ## Options
@@ -118,8 +118,8 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `minimum_input_length` is the number of keys you need to hit before the search will happen. Defaults to 2.
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned. Defaults to 10.
 * `scroll` True will enable infinite scrolling. Defaults to false.
-* `allow_clear` True will cause Select2 to display a small x for clearing the value. Defaults to false.
-* `allow_add` Is an option array for the add tags settings of Select2. Only available when 'multiple' is true on form.
+* `allow_clear` True will cause Choices.js to display a small x for clearing the value. Defaults to false.
+* `allow_add` Is an option array for the add tags settings of Choices.js. Only available when 'multiple' is true on form.
     * `enabled` Enables the allow new tags option. True or False. Default False.
     * `new_tag_text` The text that is displayed behind entities that don't exist if `allow_add` is true. Default is " (NEW)".
     * `new_tag_prefix` The prefix identifier for new tags, default is "__". Your real values must not contain these symbols in the beginning.
@@ -130,7 +130,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `cache` Enable AJAX cache. Results will be cached for each 'term' queried.
 * `cache_timeout` How long to cache a query in milliseconds. Setting to `0` will cause the cache to never timeout _(60000 = 60 seconds)_
 * `transformer` The fully qualified class name of a custom transformer if you need that flexibility as described below.
-* `autostart` Determines whether or not the select2 jQuery code is called automatically on document ready. Defaults to true which provides normal operation.
+* `autostart` Determines whether or not the choices.js jQuery code is called automatically on document ready. Defaults to true which provides normal operation.
 * `width` Sets a data-width attribute if not null. Defaults to null.
 * `class_type` Optional value that will be added to the ajax request as a query string parameter.
 
@@ -141,7 +141,7 @@ the url directly.
 The defaults can be changed in your app/config.yml file with the following format.
 
 ```yaml
-tetranz_select2_entity:
+choices_js_entity:
     minimum_input_length: 2
     page_limit: 8
     allow_clear: true
@@ -162,7 +162,7 @@ The controller should return a `JSON` array in the following format. The propert
 ]
 ```
 ## Infinite Scrolling
-If your results are being paged via the Select2 "infinite scrolling" feature then you can either continue to return
+If your results are being paged via the Choices.js "infinite scrolling" feature then you can either continue to return
 the same array as shown above _(for Backwards Compatibility this bundle will automatically try to determine if more 
 results are needed)_, or you can return an object shown below to have finer control over the paged results.
 
@@ -187,11 +187,11 @@ Your transformer must implement DataTransformerInterface. The easiest way is pro
 Here's an example that returns the country name and continent (two different properties in the Country entity):
 ```php
 $builder
-    ->add('country', Select2EntityType::class, [
+    ->add('country', ChoicesJsEntityType::class, [
         'multiple' => true,
-        'remote_route' => 'tetranz_test_default_countryquery',
-        'class' => '\Tetranz\TestBundle\Entity\Country',
-        'transformer' => '\Tetranz\TestBundle\Form\DataTransformer\CountryEntitiesToPropertyTransformer',
+        'remote_route' => 'dehy_test_default_countryquery',
+        'class' => '\Dehy\TestBundle\Entity\Country',
+        'transformer' => '\Dehy\TestBundle\Form\DataTransformer\CountryEntitiesToPropertyTransformer',
     ]);
 ```
 In transform sets data array like this:
@@ -212,14 +212,14 @@ If you are using the allow_add option and your entity requires other fields besi
 
 ### Add New Tags
 
-If you want to be able to create new entities through Select2 tags, you can enable it using the `allow_add` set of options. 
+If you want to be able to create new entities through Choices.js tags, you can enable it using the `allow_add` set of options. 
 
 For example:
 ```php
 $builder
-    ->add('tags', Select2EntityType::class, [
-        'remote_route' => 'tetranz_test_tags',
-        'class' => '\Tetranz\TestBundle\Entity\PostTags',
+    ->add('tags', ChoicesJsEntityType::class, [
+        'remote_route' => 'dehy_test_tags',
+        'class' => '\Dehy\TestBundle\Entity\PostTags',
         'text_property' => 'name',
         'multiple' => true,
         'allow_add' => [
@@ -233,12 +233,12 @@ $builder
 
 A few things to keep in mind when adding tags:
 * Your data should not have any chance of matching the first characters with the `new_tag_prefix`. If there is a chance, change it to something else like '**' or '$$'.
-* `tag_separators` is the same as the Select2 option. It should be a javascript array.
+* `tag_separators` is the same as the Choices.js option. It should be a javascript array.
 * If the entity you are wanting to `allow_add` has any other required fields aside from the one specified in `text_property`, you must either add them in the form submit or add prePersist hooks to the doctrine entity.
 * If you are using the "tags" to allow the creation of new entities through a single entry mode, keep in mind you need to remove the Space as a separator or you won't be able to input a space character in this entity. 
 ```php
 $builder
-    ->add('tags', Select2EntityType::class, [
+    ->add('tags', ChoicesJsEntityType::class, [
         ...
         'allow_add' => [
             ...
@@ -261,7 +261,7 @@ $builder
     ->add('firstName', TextType::class)
         ->add('lastName', TextType::class)
         ->add('state', EntityType::class, array('class' => State::class))
-        ->add('county', Select2EntityType::class, [
+        ->add('county', ChoicesJsEntityType::class, [
             'required' => true,
             'multiple' => false,
             'remote_route' => 'ajax_autocomplete',
@@ -283,7 +283,7 @@ $builder
 
             },
         ])
-    ->add('city', Select2EntityType::class, [
+    ->add('city', ChoicesJsEntityType::class, [
         'required' => true,
         'multiple' => false,
         'remote_route' => 'ajax_autocomplete',
@@ -321,7 +321,7 @@ Because the handling of requests is usually very similar you can use a service w
     {
         // Check security etc. if needed
     
-        $as = $this->get('tetranz_select2entity.autocomplete_service');
+        $as = $this->get('dehy_choicesjsentity.autocomplete_service');
 
         $result = $as->getAutocompleteResults($request, YourFormType::class);
 
@@ -332,7 +332,7 @@ Because the handling of requests is usually very similar you can use a service w
 
 ### Templating
 
-If you need [Templating](https://select2.org/dropdown#templating) in Select2, you could consider the following example that shows the country flag next to each option.
+If you need [Templating](https://choices.js.org/dropdown#templating) in Choices.js, you could consider the following example that shows the country flag next to each option.
 
 Your custom transformer should return data like this:
 ```javascript
@@ -341,9 +341,9 @@ Your custom transformer should return data like this:
     { id: 2, text: 'China (Asia)', img: 'images/flags/ch.png' }
 ]
 ```
-You need to define your own JavaScript function `select2entityAjax` which extends the original one `select2entity` and display custom template with image:
+You need to define your own JavaScript function `choicesjsentityAjax` which extends the original one `choicesjsentity` and display custom template with image:
 ```javascript
-$.fn.select2entityAjax = function(action) {
+$.fn.choicesjsentityAjax = function(action) {
     var action = action || {};
     var template = function (item) {
         var img = item.img || null;
@@ -358,19 +358,19 @@ $.fn.select2entityAjax = function(action) {
             '<span><img src="' + img + '" class="img-circle img-sm"> ' + item.text + '</span>'
         );
     };
-    this.select2entity($.extend(action, {
+    this.choicesjsentity($.extend(action, {
         templateResult: template,
         templateSelection: template
     }));
     return this;
 };
-$('.select2entity').select2entityAjax();
+$('.choicesjsentity').choicesjsentityAjax();
 ```
-This script will add the functionality globally for all elements with class `select2entity`, but if the `img` is not passed it will work as the original `select2entity`. 
+This script will add the functionality globally for all elements with class `choicesjsentity`, but if the `img` is not passed it will work as the original `choicesjsentity`. 
 You should add a `'autostart' => false` to form to run properly JS code.
 ````php
-    ->add('contry', Select2EntityType::class, [
-        'remote_route' => 'country_select2_query',
+    ->add('contry', ChoicesJsEntityType::class, [
+        'remote_route' => 'country_choices.js_query',
         'autostart' => false,
     ])
 ````
@@ -378,7 +378,7 @@ You should add a `'autostart' => false` to form to run properly JS code.
 
 You also will need to override the following block in your template:
 ```twig
-{% block tetranz_select2entity_widget_select_option %}
+{% block dehy_choicesjsentity_widget_select_option %}
     <option value="{{ label.id }}" selected="selected"
             {% for key, data in label %}
                 {% if key not in ['id', 'text'] %} data-{{ key }}="{{ data }}"{% endif %}
@@ -387,12 +387,12 @@ You also will need to override the following block in your template:
     </option>
 {% endblock %}
 ```
-This block adds all additional data needed to the JavaScript function `select2entityAjax`, like data attribute. In this case we are passing `data-img`.
+This block adds all additional data needed to the JavaScript function `choicesjsentityAjax`, like data attribute. In this case we are passing `data-img`.
 
 ## Embed Collection Forms
-If you use [Embedded Collection Forms](http://symfony.com/doc/current/cookbook/form/form_collections.html) and [data-prototype](http://symfony.com/doc/current/cookbook/form/form_collections.html#allowing-new-tags-with-the-prototype) to add new elements in your form, you will need the following JavaScript that will listen for adding an element `.select2entity`:
+If you use [Embedded Collection Forms](http://symfony.com/doc/current/cookbook/form/form_collections.html) and [data-prototype](http://symfony.com/doc/current/cookbook/form/form_collections.html#allowing-new-tags-with-the-prototype) to add new elements in your form, you will need the following JavaScript that will listen for adding an element `.choicesjsentity`:
 ```javascript
 $('body').on('click', '[data-prototype]', function(e) {
-    $(this).prev().find('.select2entity').last().select2entity();
+    $(this).prev().find('.choicesjsentity').last().choicesjsentity();
 });
 ```

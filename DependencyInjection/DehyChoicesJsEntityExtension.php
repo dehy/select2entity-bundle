@@ -1,6 +1,6 @@
 <?php
 
-namespace Tetranz\Select2EntityBundle\DependencyInjection;
+namespace Dehy\ChoicesJsEntityBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class TetranzSelect2EntityExtension extends Extension
+class DehyChoicesJsEntityExtension extends Extension
 {
     /**
      * {@inheritDoc}
@@ -22,9 +22,12 @@ class TetranzSelect2EntityExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter("tetranz_select2_entity.config", $config);
+        $container->setParameter('choices_js_entity.config', $config);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\XmlFileLoader(
+            $container,
+            new FileLocator(__DIR__ . '/../Resources/config')
+        );
         $loader->load('services.xml');
     }
 }

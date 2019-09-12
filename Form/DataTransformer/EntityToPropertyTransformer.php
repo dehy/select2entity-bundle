@@ -1,6 +1,6 @@
 <?php
 
-namespace Tetranz\Select2EntityBundle\Form\DataTransformer;
+namespace Dehy\ChoicesJsEntityBundle\Form\DataTransformer;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * Class EntityToPropertyTransformer
  *
- * @package Tetranz\Select2EntityBundle\Form\DataTransformer
+ * @package Dehy\ChoicesJsEntityBundle\Form\DataTransformer
  */
 class EntityToPropertyTransformer implements DataTransformerInterface
 {
@@ -38,9 +38,16 @@ class EntityToPropertyTransformer implements DataTransformerInterface
      * @param string|null            $textProperty
      * @param string                 $primaryKey
      * @param string                 $newTagPrefix
+     * @param string                 $newTagText
      */
-    public function __construct(ObjectManager $em, $class, $textProperty = null, $primaryKey = 'id', $newTagPrefix = '__', $newTagText = ' (NEW)')
-    {
+    public function __construct(
+        ObjectManager $em,
+        $class,
+        $textProperty = null,
+        $primaryKey = 'id',
+        $newTagPrefix = '__',
+        $newTagText = ' (NEW)'
+    ) {
         $this->em = $em;
         $this->className = $class;
         $this->textProperty = $textProperty;
@@ -68,10 +75,13 @@ class EntityToPropertyTransformer implements DataTransformerInterface
             : $this->accessor->getValue($entity, $this->textProperty);
 
         if ($this->em->contains($entity)) {
-            $value = (string) $this->accessor->getValue($entity, $this->primaryKey);
+            $value = (string) $this->accessor->getValue(
+                $entity,
+                $this->primaryKey
+            );
         } else {
             $value = $this->newTagPrefix . $text;
-            $text = $text.$this->newTagText;
+            $text = $text . $this->newTagText;
         }
 
         $data[$value] = $text;
@@ -97,22 +107,31 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         $valuePrefix = substr($value, 0, $tagPrefixLength);
         if ($valuePrefix == $this->newTagPrefix) {
             // In that case, we have a new entry
-            $entity = new $this->className;
-            $this->accessor->setValue($entity, $this->textProperty, $cleanValue);
+            $entity = new $this->className();
+            $this->accessor->setValue(
+                $entity,
+                $this->textProperty,
+                $cleanValue
+            );
         } else {
             // We do not search for a new entry, as it does not exist yet, by definition
             try {
-                $entity = $this->em->createQueryBuilder()
+                $entity = $this->em
+                    ->createQueryBuilder()
                     ->select('entity')
                     ->from($this->className, 'entity')
-                    ->where('entity.'.$this->primaryKey.' = :id')
+                    ->where('entity.' . $this->primaryKey . ' = :id')
                     ->setParameter('id', $value)
                     ->getQuery()
                     ->getSingleResult();
-            }
-            catch (\Doctrine\ORM\UnexpectedResultException $ex) {
+            } catch (\Doctrine\ORM\UnexpectedResultException $ex) {
                 // this will happen if the form submits invalid data
-                throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
+                throw new TransformationFailedException(
+                    sprintf(
+                        'The choice "%s" does not exist or is not unique',
+                        $value
+                    )
+                );
             }
         }
 
